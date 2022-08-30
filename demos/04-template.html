@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Multiple root instances</title>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js';
+
+            // avoid the el property now since UI is not available right now
+            const vm = new Vue({
+                el: '#root',
+                template: `
+                    <div>
+                        Hello {{name}}
+                        <ol>
+                            <li>{{emailIds[0]}}</li>
+                            <li>{{emailIds[1]}}</li>
+                        </ol>
+                        <button @click="addCheer()">Add cheer!</button>
+                    </div>
+                `,
+                data: {
+                    name: 'John',
+                    emailIds: [
+                        'john@gmail.com',
+                        'john@fynd.com'
+                    ]
+                },
+                methods: {
+                    addCheer() {
+                        this.name = this.name + '!';
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
