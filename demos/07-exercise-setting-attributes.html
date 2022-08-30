@@ -25,6 +25,7 @@
                 id: 3,
                 name: "Crash course in MongoDB",
                 category: "database",
+                imageUrl: "https://upload.wikimedia.org/wikipedia/commons/3/32/Mongo-db-logo.png",
                 description:
                     "<p><strong>MongoDB</strong> is a cross-platform document-oriented database program. It is issued under the Server Side Public License (SSPL) version 1, which was submitted for certification to the Open Source Initiative but later withdrawn in lieu of SSPL version 2. Classified as a NoSQL database program, MongoDB uses JSON-like documents with schemata. MongoDB is developed by MongoDB Inc.</p><p>MongoDB supports field, range query, and regular expression searches. Queries can return specific fields of documents and also include user-defined JavaScript functions. Queries can also be configured to return a random sample of results of a given size.</p>"
             };
@@ -41,7 +42,7 @@
                     <section class="card">
                         <h2>{{name}}</h2>
                         <span>{{category}}</span>
-                        <div>{{description}}</div>
+                        <div v-html="description"></div>
                     </section>
                 `
             });
