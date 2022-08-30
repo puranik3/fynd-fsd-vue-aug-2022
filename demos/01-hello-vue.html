@@ -9,6 +9,11 @@
     <body>
         <div id="root">
             Hello {{name}}
+            <ol>
+                <li>{{emailIds[0]}}</li>
+                <li>{{emailIds[1]}}</li>
+            </ol>
+            <button @click="addCheer()">Add cheer!</button>
         </div>
 
         <script type="module">
@@ -18,7 +23,16 @@
             new Vue({
                 el: '#root',
                 data: {
-                    name: 'Vuex'
+                    name: 'John',
+                    emailIds: [
+                        'john@gmail.com',
+                        'john@fynd.com'
+                    ]
+                },
+                methods: {
+                    addCheer() {
+                        this.name = this.name + '!';
+                    }
                 }
             })
         </script>
