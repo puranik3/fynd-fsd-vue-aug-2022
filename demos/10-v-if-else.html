@@ -18,14 +18,21 @@
             /**
              * Add 3 buttons to shift to Free / Premium / Pro
              * Add a single method to do so. Pass an argument to that method which is the plan name.
+             * Display only the buttons for the "other" 2 plans
              */
             const vm = new Vue({
                 el: '#root',
                 data: {
                     plan: 'Pro' // 'Premium' | 'Pro'
                 },
+                methods: {
+                    switchPlan( newPlan ) {
+                        this.plan = newPlan;
+                    }
+                },
                 template: `
                     <div>
+                        Current plan: <strong>{{plan}}</strong>
                         <div v-if="plan === 'Free'">
                             You can create unlimited number of public repos
                         </div>
@@ -34,6 +41,11 @@
                         </div>
                         <div v-else>
                             You can create unlimited number of private repos. No limit on collaborators.
+                        </div>
+                        <div>
+                            <button @click="switchPlan( 'Free' )">Switch to Free</button>
+                            <button @click="switchPlan( 'Premium' )">Switch to Premium</button>
+                            <button @click="switchPlan( 'Pro' )">Switch to Pro</button>
                         </div>
                     </div>
                 `
