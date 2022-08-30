@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <style>
+            .value {
+                display: inline-block;
+                width: 30px;
+                text-align: center;
+            }
+
+            .change-amount {
+                width: 64px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.js"></script>
+
+        <script type="module">
+            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
+            import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+
+            function fetchWorkshops() {
+                return axios.get( `http://workshops-server.herokuapp.com/workshops` )
+                            .then( response => response.data );
+            }
+
+            Vue.use( Vuex );
+
+
+            // Define a store
+            // Add appropriate state properties
+            // Add necessary mutations (that accept payload)
+            // Add an action, say fetchWorkshops, that fetches workshops and returns a promise
+            
+
+            const WorkshopsList = {
+                template: `
+                    <div>
+                        <h1>List of workshops</h1>
+                        <hr />
+                        <div class="alert alert-info" role="alert" v-if="processing">
+                            <strong>We are fetching workshops...Hang on!</strong>
+                        </div>
+                        <div v-else>
+                            
+                            <!-- Setup binding to show error message on error / workshops on success -->
+                            
+                            <div class="alert alert-danger" role="alert">
+                                <strong><!-- Error message goes in here --></strong>
+                            </div>
+                            <ul class="list-group" v-else>
+                                <li class="list-group-item clearfix">
+                                    <!-- Name of workshop goes in here -->
+                                    <div class="float-right">
+                                        <!-- Set style using the available() helper --> 
+                                        <span class="badge">Online</span>
+                                        <span class="badge">In-person</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                `,
+                
+                // Set up computed properties
+                
+                // Helper method for styling the mode display of a workshop
+                methods: {
+                    available( workshop, mode ) {
+                        return {
+                            'badge-success': workshop.modes[mode],
+                            'badge-secondary': !workshop.modes[mode]
+                        }
+                    }
+                },
+                
+                created() {
+                    // Dispatch fetchWorkshops action -> log on success and error
+                    
+                }
+            };
+
+            new Vue({
+                el: '#app',
+                components: {
+                    WorkshopsList
+                },
+                template: `
+                    <div id="app" class="container my-4">
+                        <WorkshopsList />
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>

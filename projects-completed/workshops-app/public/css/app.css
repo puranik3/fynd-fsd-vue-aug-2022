@@ -1,0 +1,17 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.my-sm {
+    margin-top: 0.8em;
+    margin-top: 0.8em;
+}
+
+hr {
+    border: 0;
+    border-bottom: 1px solid lightgray;
+}

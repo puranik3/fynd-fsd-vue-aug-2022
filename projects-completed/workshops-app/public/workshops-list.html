@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Workshops List | Workshops App</title>
+        <link rel="stylesheet" href="/external/normalize.css">
+        <link rel="stylesheet" href="/css/utils.css">
+        <link rel="stylesheet" href="/css/app.css">
+        <link rel="stylesheet" href="/css/nav.css">
+        <link rel="stylesheet" href="/css/pages/workshops-list.css">
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="d-flex container">
+                <ul class="nav d-flex list-unstyled">
+                    <li><a href="/index.html">Home</a></li>
+                    <li><a href="/workshops-list.html" class="active">Workshops List</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main>
+            <div class="container my-lg">
+                <h1>List of Workshops</h1>
+                <hr />
+                <div class="workshops-list">
+                    <a class="workshops-list-item" href="workshop-details.html?id=1&name=Angular+JS+Bootcamp">
+                        <div class="img-wrapper">
+                            <img
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/AngularJS_logo.svg/2000px-AngularJS_logo.svg.png"
+                                alt="Angular JS logo"
+                                class="img-fluid"
+                            />
+                        </div>
+                        <h2>Angular JS Bootcamp</h2>
+                        <div class="item-details">
+                            <div class="my-sm">Mon Aug 23 - Fri Aug 27</div>
+                            <div class="my-sm">10:30 AM - 5:00 PM</div>
+                        </div>
+                    </a>
+                    <a class="workshops-list-item" href="workshop-details.html?id=2&name=React+JS+Masterclass">
+                        <div class="img-wrapper">
+                            <img
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/640px-React-icon.svg.png"
+                                alt="React JS logo"
+                                class="img-fluid"
+                            />
+                        </div>
+                        <h2>React JS Masterclass</h2>
+                        <div class="item-details">
+                            <div class="my-sm">Mon Aug 23 - Fri Aug 27</div>
+                            <div class="my-sm">10:30 AM - 5:00 PM</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

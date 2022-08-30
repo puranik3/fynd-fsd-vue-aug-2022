@@ -1,0 +1,17 @@
+.navbar {
+    padding: 1em 0;
+    background-color: rgb( 248, 248, 248 );
+}
+
+.nav li {
+    margin-right: 2em;
+}
+
+.nav a {
+    text-decoration: none;
+    color: gray;
+}
+
+.nav .active {
+    color: blue;
+}

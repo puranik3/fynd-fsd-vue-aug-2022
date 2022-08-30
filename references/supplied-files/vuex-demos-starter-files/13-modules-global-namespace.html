@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <style>
+            .value {
+                display: inline-block;
+                width: 30px;
+                text-align: center;
+            }
+
+            .change-amount {
+                width: 64px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.js"></script>
+
+        <script type="module">
+            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
+            import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+
+            Vue.use( Vuex );
+
+            const counterModule = {
+                state: {
+                    processing: false,
+                    value: 0
+                },
+                mutations: {
+                    increment( state, payload ) {
+                        state.value += payload;
+                    },
+                    decrement( state, payload ) {
+                        state.value -= payload;
+                    },
+                    setProcessing( state, payload ) {
+                        state.processing = payload;
+                    }
+                },
+                actions: {
+                    increment( context, payload ) {
+                        context.commit( 'setProcessing', true );
+
+                        setTimeout(() => {
+                            context.commit( 'increment', payload );
+                            context.commit( 'setProcessing', false );
+                        }, 2000);
+                    },
+                    decrement( context, payload ) {
+                        context.commit( 'setProcessing', true );
+
+                        setTimeout(() => {
+                            context.commit( 'decrement', payload );
+                            context.commit( 'setProcessing', false );
+                        }, 2000);
+                    }
+                }
+            };
+
+            const workshopsModule = {
+                state: {
+                    processing: false,
+                    workshops: [],
+                    error: null
+                },
+                getters: {
+                    numWorkshops( state ) {
+                        return {
+                            any: state.workshops.length,
+                            online: state.workshops.filter( workshop => workshop.modes.online ).length,
+                            inPerson: state.workshops.filter( workshop => workshop.modes.inPerson ).length
+                        };
+                    },
+                    workshopsWithMode( state ) {
+                        return function( mode ) {
+                            if( mode === 'any' ) {
+                                return state.workshops;
+                            } else {
+                                return state.workshops.filter( workshop => workshop.modes[mode] );
+                            }
+                        };
+                    }
+                },
+                mutations: {
+                    workshops( state, payload ) {
+                        state.workshops = payload;
+                    },
+                    error( state, payload ) {
+                        state.error = payload;
+                    },
+                    processing( state, payload ) {
+                        state.processing = payload;
+                    }
+                },
+                actions: {
+                    fetchWorkshops( context, payload ) {
+                        context.commit( 'processing', true );
+
+                        return axios.get( `http://workshops-server.herokuapp.com/workshops` )
+                                    .then( response => response.data )
+                                    .then( workshops => {
+                                        context.commit( 'workshops', workshops );
+                                        context.commit( 'processing', false );
+
+                                        return workshops;
+                                    })
+                                    .catch( error => {
+                                        context.commit( 'error', error );
+                                        context.commit( 'processing', false );
+
+                                        throw error;
+                                    });
+                    }
+                }
+            };
+
+            const store = new Vuex.Store({
+                modules: {
+                    workshopsModule,
+                    counterModule
+                }
+            });
+            
+            const WorkshopsList = {
+                template: `
+                    <div>
+                        <h1>List of workshops</h1>
+                        <hr />
+                        <div class="alert alert-info" role="alert" v-if="processing">
+                            <strong>We are fetching workshops...Hang on!</strong>
+                        </div>
+                        <div v-else>
+                            <div class="alert alert-danger" role="alert" v-if="error">
+                                <strong>{{error.message}}</strong>
+                            </div>
+                            <div v-else>
+                                <div class="text-center text-muted text-small mb-2">
+                                    <small class="mr-2">Total: {{numWorkshops.any}}</small>
+                                    <small class="mr-2">Online: {{numWorkshops.online}}</small>
+                                    <small>In-person: {{numWorkshops.inPerson}}</small>
+                                </div>
+                                <div class="text-center mb-2">
+                                    <select v-model="mode">
+                                        <option value="" disabled>-- Filter by mode --</option>
+                                        <option value="any">Any</option>
+                                        <option value="online">Online</option>
+                                        <option value="inPerson">In-person</option>
+                                    </select>
+                                </div>
+                                <ul class="list-group">
+                                    <li class="list-group-item clearfix" v-for="workshop in workshopsWithMode( mode )" :key="workshop.id">
+                                        {{workshop.name}}
+                                        <div class="float-right">
+                                            <span class="badge" :class="available( workshop, 'online' )">Online</span>
+                                            <span class="badge" :class="available( workshop, 'inPerson' )">In-person</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                data() {
+                    return {
+                        mode: 'any'
+                    };
+                },
+                computed: {
+                    // Notice the change in state access
+                    ...Vuex.mapState({
+                        processing: state => state.workshopsModule.processing,
+                        workshop: state => state.workshopsModule.workshops,
+                        error: state => state.workshopsModule.error
+                    }),
+                    ...Vuex.mapGetters([
+                        'numWorkshops',
+                        'workshopsWithMode'
+                    ])
+                },
+                methods: {
+                    available( workshop, mode ) {
+                        return {
+                            'badge-success': workshop.modes[mode],
+                            'badge-secondary': !workshop.modes[mode]
+                        }
+                    }
+                },
+                created() {
+                    this.$store.dispatch( 'fetchWorkshops' )
+                         .then( workshops => console.log( 'received : ', workshops ) )
+                         .catch( error => console.log( 'error : ', error.message ) );
+                }
+            };
+
+            const Counter = {
+                template: `
+                    <div class="counter">
+                        <div class="form-group">
+                            <label for="change-amount">Change by amount</label>
+                            <input type="number" v-model.number="changeAmount" value="1" class="form-control d-inline-block change-amount" />
+                        </div>
+                        <button @click="decrement( changeAmount )" class="btn btn-dark btn-sm" :disabled="processing">-</button>
+                        <div class="value">
+                            <div class="spinner-grow spinner-grow-sm" role="status" v-if="processing">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <span v-else>{{value}}</span>
+                        </div>
+                        <button @click="increment( changeAmount )" class="btn btn-dark btn-sm" :disabled="processing">+</button>
+                    </div>
+                `,
+                data() {
+                    return {
+                        changeAmount: 1
+                    };
+                },
+                computed: {
+                    // Notice the change in state access
+                    ...Vuex.mapState({
+                        value: state => state.counterModule.value,
+                        processing: state => state.counterModule.processing
+                    })
+                },
+                methods: {
+                    ...Vuex.mapActions([
+                        'increment',
+                        'decrement'
+                    ])
+                }
+            };
+
+            new Vue({
+                el: '#app',
+                store,
+                components: {
+                    Counter,
+                    WorkshopsList
+                },
+                template: `
+                    <div id="app" class="container my-4">
+                        <Counter />
+                        <WorkshopsList />
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>

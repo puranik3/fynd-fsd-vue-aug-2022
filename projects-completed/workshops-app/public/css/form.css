@@ -1,0 +1,33 @@
+.form-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.form-group label {
+    flex-basis: 100%;
+    margin: 0.3em 0;
+}
+
+.form-group .form-control {
+    flex-basis: 100%;
+    padding: 0.5em;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    margin: 0.3em 0;
+}
+
+.form-group .form-control:focus {
+    outline: 0;
+    box-shadow: 0px 0px 2px 2px rgba( 64, 128, 192, 0.5 );
+}
+
+@media ( min-width : 992px ) {
+    .form-group label {
+        flex-basis: 23.5%;
+    }
+    
+    .form-group .form-control {
+        flex-basis: 73.5%;
+    }
+}

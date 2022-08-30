@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <style>
+            .value {
+                display: inline-block;
+                min-width: 30px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
+            
+            // Include Vuex
+            // import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+
+            // Use Vuex in Vue (Vue.use())
+            
+            // Define store with state and mutations
+            
+            const Counter = {
+                template: `
+                    <div class="counter">
+                        <button @click="decrement" class="btn btn-dark btn-sm">-</button>
+                        <span class="value">{{value}}</span>
+                        <button @click="increment" class="btn btn-dark btn-sm">+</button>
+                    </div>
+                `,
+                
+                // Define computed properties to get store properties
+                
+                // Define methods that commit mutations
+                
+            };
+
+            new Vue({
+                el: '#app',
+                components: {
+                    Counter
+                },
+                template: `
+                    <div id="app" class="container my-4">
+                        <h1>Counter</h1>
+                        <hr />
+                        <Counter />
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
