@@ -13,6 +13,10 @@
                 color: #333;
                 font-size: 1.5em;
             }
+
+            .img-fluid {
+                width: 100%;
+            }
         </style>
     </head>
     <body>
@@ -32,12 +36,15 @@
 
             /**
              * Set up the image for the workshop
+             * 
+             * Use v-bind:attr="variable" or :attr="variable" to set attribute values
              */
             const vm = new Vue({
                 el: '#root',
                 data: workshop,
                 template: `
                     <section class="card">
+                        <img v-bind:src="imageUrl" :alt="name" class="img-fluid" />
                         <h2>{{name}}</h2>
                         <span>{{category}}</span>
                         <div v-html="description"></div>
