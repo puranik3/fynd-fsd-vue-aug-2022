@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Multiple root instances</title>
+    </head>
+    <body>
+        <div id="root1">
+            Hello {{name}}
+            <ol>
+                <li>{{emailIds[0]}}</li>
+                <li>{{emailIds[1]}}</li>
+            </ol>
+            <button @click="addCheer()">Add cheer!</button>
+        </div>
+        
+        <div id="root2">
+            Hello {{name}}
+            <ol>
+                <li>{{emailIds[0]}}</li>
+                <li>{{emailIds[1]}}</li>
+            </ol>
+            <button @click="addCheer()">Add cheer!</button>
+        </div>
+
+        <script type="module">
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js';
+
+            // you can have multiple root instances in the app but we do not do that
+            new Vue({
+                el: '#root1',
+                data: {
+                    name: 'John',
+                    emailIds: [
+                        'john@gmail.com',
+                        'john@fynd.com'
+                    ]
+                },
+                methods: {
+                    addCheer() {
+                        this.name = this.name + '!';
+                    }
+                }
+            })
+            
+            new Vue({
+                el: '#root2',
+                data: {
+                    name: 'Jane',
+                    emailIds: [
+                        'jane@gmail.com',
+                        'jane@fynd.com'
+                    ]
+                },
+                methods: {
+                    addCheer() {
+                        this.name = this.name + '!';
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
