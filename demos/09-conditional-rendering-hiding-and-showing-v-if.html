@@ -19,10 +19,18 @@
              * Add a button, clicking which applies a coupon, and see what happens
              * Add another button, clicking which will remove the coupon, and see what happens
              */
-            const vm = new Vue({
+            new Vue({
                 el: '#root',
                 data: {
                     coupon: null
+                },
+                methods: {
+                    addCoupon() {
+                        this.coupon = 'IPL50';
+                    },
+                    removeCoupon() {
+                        this.coupon = null;
+                    }
                 },
                 template: `
                     <div>
@@ -30,6 +38,8 @@
                         <div v-if="coupon !== null">
                             Discount coupon applied: {{coupon}}
                         </div>
+                        <button @click="addCoupon()">Apply coupon</button>
+                        <button @click="removeCoupon()">I do not want the coupon</button>
                     </div>
                 `
             });
