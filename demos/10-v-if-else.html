@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title></title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            /**
+             * Add 3 buttons to shift to Free / Premium / Pro
+             * Add a single method to do so. Pass an argument to that method which is the plan name.
+             */
+            const vm = new Vue({
+                el: '#root',
+                data: {
+                    plan: 'Pro' // 'Premium' | 'Pro'
+                },
+                template: `
+                    <div>
+                        <div v-if="plan === 'Free'">
+                            You can create unlimited number of public repos
+                        </div>
+                        <div v-else-if="plan === 'Premium'">
+                            You can create unlimited number of private repos. Maximum 3 collaborators per repo.
+                        </div>
+                        <div v-else>
+                            You can create unlimited number of private repos. No limit on collaborators.
+                        </div>
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>
