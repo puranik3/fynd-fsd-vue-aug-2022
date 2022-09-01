@@ -26,7 +26,8 @@
 
              /*
               * Event modifier helps implement common event-related logic easily - eg. preventing browser default action
-              * keyup.enter="handler" -> the handler is called only when the ENter key is pressed
+              * keyup.enter="handler" -> the handler is called only when the Enter key is pressed
+              * click.meta="handler" -> the handler is called only when the element is clicked while holding down the Meta key (Windows key / Command key on Mac)
              */
             const vm = new Vue({
                 el: '#root',
@@ -64,14 +65,12 @@
                                     <label for="username">Username</label>
                                 </div>
                                 <input type="text" id="username" v-model="credentials.username" />
-                                <!-- {{username}} -->
                             </div>
                             <div class="form-group">
                                 <div>
                                     <label for="password">Password</label>
                                 </div>
                                 <input type="password" id="password" v-model="credentials.password" @keyup.enter="validatePassword" />
-                                <!-- {{password}} -->
                             </div>
                             <button type="button" @click.meta="doSomething">Click with Meta key</button>
                             <button type="submit">Login</button>
