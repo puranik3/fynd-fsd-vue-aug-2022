@@ -43,13 +43,13 @@
                             You can create unlimited number of private repos. No limit on collaborators.
                         </div>
                         <div>
-                            <button @click="switchPlan( 'Free' )">
+                            <button @click="switchPlan( 'Free' )" v-if="plan !== 'Free'">
                                 Switch to Free
                             </button>
-                            <button @click="switchPlan( 'Premium' )">
+                            <button @click="switchPlan( 'Premium' )" v-if="plan !== 'Premium'">
                                 Switch to Premium
                             </button>
-                            <button @click="switchPlan( 'Pro' )">
+                            <button @click="switchPlan( 'Pro' )" v-if="plan !== 'Pro'">
                                 Switch to Pro
                             </button>
                         </div>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>v-model for form inputs</title>
+        <style>
+            body {
+                width: 80%;
+                max-width: 1280px;
+                margin: 0 auto;
+                text-align: center;
+            }
+
+            .form-group {
+                margin: 1em 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            /**
+             * v-model can be used ONLY on input, select, textarea
+             */
+            const vm = new Vue({
+                el: '#root',
+                data: {
+                    username: 'johndoe',
+                    password: ''
+                },
+                template: `
+                    <div>
+                        <h1>Login</h1>
+                        <hr />
+                        <form>
+                            <div class="form-group">
+                                <div>
+                                    <label for="username">Username</label>
+                                </div>
+                                <input type="text" id="username" v-model="username" />
+                                <!-- {{username}} -->
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <label for="password">Password</label>
+                                </div>
+                                <input type="password" id="password" v-model="password" />
+                                <!-- {{password}} -->
+                            </div>
+                            <button type="submit">Login</button>
+                        </form>
+                    </div>
+                `
+            });
+
+            console.log( vm );
+        </script>
+    </body>
+</html>
