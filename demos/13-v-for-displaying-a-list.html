@@ -6,7 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>v-for for list iteration</title>
         <style>
-            
+            .locations > li {
+                margin-top: 0.5em;
+                margin-bottom: 0.5em;
+            }
         </style>
     </head>
     <body>
@@ -41,14 +44,27 @@
                         };
 
                         this.cities.push( location );
+                    },
+                    deleteLocation( cityToBeDeleted ) {
+                        console.log( cityToBeDeleted );
+
+                        // approach # 1 - filter()
+                        const newCities = this.cities.filter( 
+                            ( city ) => city.name !== cityToBeDeleted.name
+                        );
+
+                        this.cities = newCities;
+
+                        // approach # 2 - findIndex() + splice()
                     }
                 },
                 template: `
                     <div>
                         <h1>Fynd | Office locations</h1>
-                        <ol>
+                        <ol class="locations">
                             <li v-for="city in cities">
                                 <strong>{{city.name}}</strong> - {{city.num}}
+                                <button @click="deleteLocation( city )">Delete</button>
                             </li>
                         </ol>
                         <select>
