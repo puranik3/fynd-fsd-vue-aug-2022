@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title></title>
+        <title>v-for for list iteration</title>
         <style>
             
         </style>
@@ -18,15 +18,30 @@
             /**
              * EXERCISE: Use v-for to construct a dropdown with cities in the options. The value and display text of every option to the city's name.
              */
-            const vm = new Vue({
+            new Vue({
                 el: '#root',
                 data: {
                     cities: [
                         { name: 'Bengaluru', num: 50 },
                         { name: 'Kolkata', num: 100 },
-                        { name: 'Mumbai', num: 500 },
+                        { name: 'Mumbai', num: 500, selected: true },
                         { name: 'Noida', num: 250 }
-                    ]
+                    ],
+                    location: {
+                        name: '',
+                        num: 0
+                    }
+                },
+                methods: {
+                    addLocation() {
+                        // let us copy the location object
+                        // location = { ...this.location } -> { name: this.location.name, num: this.location.num }
+                        const location = {
+                            ...this.location
+                        };
+
+                        this.cities.push( location );
+                    }
                 },
                 template: `
                     <div>
@@ -36,6 +51,31 @@
                                 <strong>{{city.name}}</strong> - {{city.num}}
                             </li>
                         </ol>
+                        <select>
+                            <option value="">-- Select your preferred location --</option>
+                            <option
+                                v-for="city in cities"
+                                :value="city.name"
+                                :selected="city.selected"
+                            >
+                                    {{city.name}}
+                            </option>
+                        </select>
+                        <hr />
+                        <h2>Add a new location</h2>
+                        <form @submit.prevent="addLocation">
+                            <input
+                                type="text"
+                                placeholder="New location"
+                                v-model="location.name"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Number of employees"
+                                v-model="location.num"
+                            />
+                            <button type="submit">Add location</button>
+                        </form>
                     </div>
                 `
             });
