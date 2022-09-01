@@ -36,11 +36,21 @@
                     username: 'johndoe',
                     password: ''
                 },
+                methods: {
+                    changeName() {
+                        this.username = ( this.username === 'johndoe' ? 'janedoe' : 'johndoe' );
+                    },
+                    login( event ) {
+                        // event.preventDefault(); // prevents browser from submitting the form
+                        console.log( event );
+                    }
+                },
                 template: `
                     <div>
                         <h1>Login</h1>
                         <hr />
-                        <form>
+                        <!-- <form @submit.prevent="login( $event )"> -->
+                        <form @submit.prevent="login">
                             <div class="form-group">
                                 <div>
                                     <label for="username">Username</label>
@@ -55,6 +65,7 @@
                                 <input type="password" id="password" v-model="password" />
                                 <!-- {{password}} -->
                             </div>
+                            <button type="button" @click="changeName()">Change name</button>
                             <button type="submit">Login</button>
                         </form>
                     </div>
