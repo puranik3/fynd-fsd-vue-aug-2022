@@ -15,8 +15,26 @@
         <script type="module">
             import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
 
+            /** Something similar to defining CSS classes - uses camelCase instead of kebab-case for CSS properties */
+            const successColor = {
+                borderColor: 'green'
+            };
+
+            const successBgColor = {
+                backgroundColor: 'lightgreen'
+            };
+            
+            const errorColor = {
+                borderColor: 'crimson'
+            };
+
+            const errorBgColor = {
+                backgroundColor: 'lightpink'
+            };
+
             /**
              * When you have to apply inline styling conditionally, we can create a computed property that returns the conditional style, and use it on the element
+             * Hard-coded style (style), and conditional style (:style) can be used together
              */
             new Vue({
                 el: '#root',
@@ -27,9 +45,21 @@
                 computed: {
                     alertStyle() {
                         if( this.status === 'success' ) {
-                            return 'border-color: green;';
+                            // return 'border-color: green;';
+                            return { // combining multiple "classes"
+                                ...successColor,
+                                ...successBgColor
+                            };
                         } else {
-                            return 'border-color: crimson;';
+                            // return 'border-color: crimson;';
+                            // return {
+                            //     borderColor: 'crimson',
+                            //     backgroundColor: 'lightpink'
+                            // };
+                            return {
+                                ...errorColor,
+                                ...errorBgColor
+                            };
                         }
                     }
                 },
@@ -37,7 +67,14 @@
                     setMessage( message, status ) {
                         this.message = message;
                         this.status = status;
-                    }
+                    },
+                    // alertStyle() {
+                    //     if( this.status === 'success' ) {
+                    //         return 'border-color: green;';
+                    //     } else {
+                    //         return 'border-color: crimson;';
+                    //     }
+                    // }
                 },
                 template: `
                     <div>
