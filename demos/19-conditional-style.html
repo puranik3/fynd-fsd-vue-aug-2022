@@ -22,6 +22,10 @@
                 border-color: crimson;
                 background-color: lightpink;
             }
+
+            .high {
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
@@ -38,16 +42,16 @@
                 el: '#root',
                 data: {
                     status: 'success',
+                    importance: 'low',
                     message: 'The email was sent'
                 },
                 computed: {
                     alertClass() {
-                        if( this.status === 'success' ) {
-                            // you can have space-separated set of classes
-                            return 'alert-success';
-                        } else {
-                            return 'alert-error';
-                        }
+                        return {
+                            "alert-success": this.status === 'success',
+                            "alert-error": this.status === 'error',
+                            "high": this.importance === 'high'
+                        };
                     }
                 },
                 methods: {
@@ -65,7 +69,7 @@
                             {{message}}
                         </div>
                         <button
-                            @click="setMessage( 'Email could not be sent', 'error' )"
+                            @click="setMessage( 'Email could not be sent', 'error', 'high' )"
                         >
                             Show error
                         </button>
