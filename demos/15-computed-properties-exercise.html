@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Computed properties - exercise</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            /**
+             * Use a computed property called matchingTechnologies that is an array of those technologies which contains the search key
+             */
+            new Vue({
+                el: '#root',
+                data: {
+                    technologies: [
+                        'HTML',
+                        'CSS',
+                        'JavaScript (JS)',
+                        'Vue JS',
+                        'Node JS',
+                        'Express',
+                        'Mongo DB',
+                        'AWS',
+                        'Deployment'
+                    ]
+                },
+                template: `
+                    <div>
+                        <input type="search" placeholder="Search by name" />
+                        <!-- display the list -->
+                        <div>list to be displayed</div>
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>
