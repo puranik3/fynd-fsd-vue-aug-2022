@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>v-for for list iteration</title>
+        <style>
+            .locations > li {
+                margin-top: 0.5em;
+                margin-bottom: 0.5em;
+            }
+
+            .area {
+                display: inline-block;
+                padding: 0.3em;
+                border-radius: 4px;
+                margin-right: 10px;
+                background-color: navy;
+                color: ivory;
+                font-size: 0.8em;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            /**
+             * Virtual DOM: https://v2.vuejs.org/v2/guide/render-function.html#Nodes-Trees-and-the-Virtual-DOM
+             * 
+             * Before...
+             * <li>Bengaluru</li>
+             * <li>Kolkata</li>
+             * <li>Mumbai</li>
+             * <li>Noida</li>
+             * 
+             * After... (without key -> there are ~5 DOM nodes "changed")
+             * <li>Hyderabad</li> -> changed
+             * <li>Bengaluru</li> -> changed
+             * <li>Kolkata</li> -> changed
+             * <li>Mumbai</li> -> changed
+             * <li>Noida</li> -> created
+             * 
+             * After... (with key -> there are ~1 DOM nodes "changed")
+             * <li>Hyderabad</li> -> created
+             * <li>Bengaluru</li> -> no change
+             * <li>Kolkata</li> -> no change
+             * <li>Mumbai</li> -> no change
+             * <li>Noida</li> -> no change
+             */
+            new Vue({
+                el: '#root',
+                data: {
+                    cities: [
+                        { name: 'Bengaluru', num: 50, areas: [ 'Koramangala', 'Whitefield' ] },
+                        { name: 'Kolkata', num: 100, areas: [ 'Diamond Harbor' ] },
+                        { name: 'Mumbai', num: 500, selected: true, areas: [ 'Bandra', 'Nariman Point' ] },
+                        { name: 'Noida', num: 250, areas: [ 'Hi Tech City', 'Sector 17' ] }
+                    ],
+                    location: {
+                        name: '',
+                        num: 0
+                    }
+                },
+                methods: {
+                    addLocation() {
+                        // let us copy the location object
+                        // location = { ...this.location } -> { name: this.location.name, num: this.location.num }
+                        const location = {
+                            ...this.location
+                        };
+
+                        this.cities.unshift( location );
+                    },
+                    deleteLocation( cityToBeDeleted ) {
+                        console.log( cityToBeDeleted );
+
+                        // approach # 1 - filter()
+                        const newCities = this.cities.filter( 
+                            ( city ) => city.name !== cityToBeDeleted.name
+                        );
+
+                        this.cities = newCities;
+
+                        // approach # 2 - findIndex() + splice()
+                        // EXERCISE (please try later)
+                    }
+                },
+                template: `
+                    <div>
+                        <h1>Fynd | Office locations</h1>
+                        <ol class="locations">
+                            <li v-for="( city, idx ) in cities" :key="city.name">
+                                <strong>{{idx}}. {{city.name}}</strong> - {{city.num}}
+                                <strong>Areas</strong>: 
+                                <span
+                                    v-for="area in city.areas"
+                                    :key="area"
+                                    class="area"
+                                >
+                                    {{area}}
+                                </span>
+                                <button @click="deleteLocation( city )">Delete</button>
+                            </li>
+                        </ol>
+                        <select>
+                            <option value="">-- Select your preferred location --</option>
+                            <option
+                                v-for="city in cities"
+                                :value="city.name"
+                                :selected="city.selected"
+                            >
+                                    {{city.name}}
+                            </option>
+                        </select>
+                        <hr />
+                        <h2>Add a new location</h2>
+                        <form @submit.prevent="addLocation">
+                            <input
+                                type="text"
+                                placeholder="New location"
+                                v-model="location.name"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Number of employees"
+                                v-model="location.num"
+                            />
+                            <button type="submit">Add location</button>
+                        </form>
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>

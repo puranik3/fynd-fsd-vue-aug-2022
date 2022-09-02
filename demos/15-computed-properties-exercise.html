@@ -36,6 +36,7 @@
                 },
                 computed: {
                     matchingTechnologies() {
+                        // another way to find if searchKey is a substring (case-insensitive) is using regexp matching
                         return this.technologies.filter(
                             tech => tech.toLowerCase().includes( this.searchKey.toLowerCase() )
                         )
