@@ -31,13 +31,26 @@
                         'Mongo DB',
                         'AWS',
                         'Deployment'
-                    ]
+                    ],
+                    searchKey: ''
+                },
+                computed: {
+                    matchingTechnologies() {
+                        return this.technologies.filter(
+                            tech => tech.toLowerCase().includes( this.searchKey.toLowerCase() )
+                        )
+                    }
                 },
                 template: `
                     <div>
-                        <input type="search" placeholder="Search by name" />
-                        <!-- display the list -->
-                        <div>list of matching technologies be displayed (initially displays all technologies)</div>
+                        <input
+                            type="search"
+                            placeholder="Search by name"
+                            v-model="searchKey"
+                        />
+                        <ol>
+                            <li v-for="tech in matchingTechnologies">{{tech}}</li>
+                        </ol>
                     </div>
                 `
             });
