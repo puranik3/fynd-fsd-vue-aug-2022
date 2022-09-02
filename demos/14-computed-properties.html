@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Computed properties</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            new Vue({
+                el: '#root',
+                data: {
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    age: 32
+                },
+                computed: {
+                    fullName() { // whenever the date this computed property uses changes, the function is called
+                        console.log( 'fullName function called' );
+                        return this.firstName + ' ' + this.lastName;
+                    }
+                },
+                methods: {
+                    getFullName() { // whenever any data changes, the function is called
+                        console.log( 'getFullName function called' );
+                        return this.firstName + ' ' + this.lastName;
+                    }
+                },
+                template: `
+                    <div>
+                        <input type="text" v-model="firstName" placeholder="First name" />
+                        <input type="text" v-model="lastName" placeholder="Last name" />
+                        <input type="text" v-model="age" placeholder="Age" />
+                        <div>
+                            {{firstName}} {{lastName}}
+                        </div>
+                        <div>
+                            {{getFullName()}}
+                        </div>
+                        <div>
+                            {{fullName}}
+                        </div>
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>
