@@ -6,8 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Components</title>
         <style>
-            .panel {
+            .panel-primary {
                 border: 1px solid navy;
+            }
+            
+            .panel-secondary {
+                border: 1px solid goldenrod;
             }
 
             .panel-heading,
@@ -15,8 +19,13 @@
                 padding: 0.8em 1em;
             }
 
-            .panel-heading {
+            .panel-primary .panel-heading {
                 background-color: navy;
+                color: white;
+            }
+            
+            .panel-secondary .panel-heading {
+                background-color: goldenrod;
                 color: white;
             }
         </style>
@@ -70,6 +79,13 @@
                     body: {
                         type: String,
                         default: 'Info not shared'
+                    },
+                    theme: {
+                        type: String,
+                        validator( value ) {
+                            const themes = [ 'primary', 'secondary' ];
+                            return themes.includes( value );
+                        }
                     }
                 },
                 data() {
@@ -84,7 +100,7 @@
                     }
                 },
                 template: `
-                    <div class="panel">
+                    <div class="panel" :class="theme === 'primary' ? 'panel-primary' : 'panel-secondary'">
                         <PanelHeading :heading="heading" :toggle="toggle" />
                         <PanelBody :show="show" :body="body" />
                     </div>
@@ -98,8 +114,15 @@
                 el: '#root',
                 template: `
                     <div>
-                        <Panel heading="What is Vue?" body="It is a frontend framework for building UI of web apps" />
-                        <Panel heading="What is JavaScript?" />
+                        <Panel
+                            heading="What is Vue?"
+                            body="It is a frontend framework for building UI of web apps"
+                            theme="primary"
+                        />
+                        <Panel
+                            heading="What is JavaScript?"
+                            theme="tertiary"
+                        />
                     </div>
                 `
             })
