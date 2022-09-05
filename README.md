@@ -7,3 +7,5 @@
     - Q. 4, 6, 10
 - September 2
     - Q. 3, 9, 10, 11, 12, 13
+- September 5
+    - All questions upto 12 can be completed
