@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Fetching data</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            new Vue({
+                el: '#root',
+                data: {
+                    workshops: [],
+                    error: null
+                },
+                template: `
+                    <div>
+                        <h1>List of workshops</h1>
+                        <ol>
+                            <li v-for="workshop in workshops" :key="workshop.id">
+                                {{workshop.name}}
+                            </li>
+                        </ol>
+                    </div>
+                `,
+                // "mounted" is a "lifecycle methods"
+                async mounted() {
+                    console.log( 'DOM is mounted' );
+
+                    try {
+                        const response = await fetch( `https://workshops-server.herokuapp.com/workshops` );
+
+                        if( !response.ok ) {
+                            throw new Error( response.statusText ); // please check if this is the correct way to handle 404 / 500 kind of errors
+                        }
+
+                        this.workshops = await response.json();
+                    } catch( error ) {
+                        this.error = error;
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
