@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Components</title>
+        <style>
+            .panel {
+                border: 1px solid navy;
+            }
+
+            .panel-heading,
+            .panel-body {
+                padding: 0.8em 1em;
+            }
+
+            .panel-heading {
+                background-color: navy;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            // The non-minified version is used here (development build)
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.js";
+
+            /**
+             * To have props validated during development, you MUST include the non-minified version of Vue JS script
+             */
+            const PanelBody = {
+                props: {
+                    show: {
+                        type: Boolean,
+                        required: true
+                    },
+                    body: {
+                        type: String,
+                        required: true
+                    }
+                },
+                template: `
+                    <div class="panel-body" v-show="show">{{body}}</div>
+                `
+            };
+
+            const PanelHeading = {
+                props: {
+                    heading: String,
+                    toggle: Function
+                },
+                template: `
+                    <div class="panel-heading" @click="toggle">{{heading}}</div>
+                `
+            };
+
+            const Panel = {
+                components: {
+                    PanelHeading,
+                    PanelBody
+                },
+                props: {
+                    heading: {
+                        type: String,
+                        default: 'No heading'
+                    },
+                    body: {
+                        type: String,
+                        default: 'Info not shared'
+                    }
+                },
+                data() {
+                    return {
+                        show: true
+                    };
+                },
+                methods: {
+                    toggle() {
+                        this.show = !this.show;
+                        // console.log( this.heading ); // we can access props but we should not manipulate them
+                    }
+                },
+                template: `
+                    <div class="panel">
+                        <PanelHeading :heading="heading" :toggle="toggle" />
+                        <PanelBody :show="show" :body="body" />
+                    </div>
+                `
+            };
+
+            new Vue({
+                components: { // "local registration" of the component we would like to use
+                    Panel
+                },
+                el: '#root',
+                template: `
+                    <div>
+                        <Panel heading="What is Vue?" body="It is a frontend framework for building UI of web apps" />
+                        <Panel heading="What is JavaScript?" />
+                    </div>
+                `
+            })
+        </script>
+    </body>
+</html>
