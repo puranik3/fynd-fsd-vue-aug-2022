@@ -27,11 +27,8 @@
         <script type="module">
             import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
 
-            /**
-             * EXERCISE: Create a PanelBody to show the body of the panel. Pass whatever props is required for it.
-             */
             const PanelBody = {
-                props: [ 'show', 'body' ],
+                props: [ 'show' ],
                 template: `
                     <div class="panel-body" v-show="show">
                         <slot><slot>
@@ -40,9 +37,11 @@
             };
 
             const PanelHeading = {
-                props: [ 'heading', 'toggle' ],
+                props: [ 'toggle' ],
                 template: `
-                    <div class="panel-heading" @click="toggle">{{heading}}</div>
+                    <div class="panel-heading" @click="toggle">
+                        <slot></slot>
+                    </div>
                 `
             };
 
@@ -51,7 +50,6 @@
                     PanelHeading,
                     PanelBody
                 },
-                props: [ 'heading', 'body' ],
                 data() {
                     return {
                         show: true
@@ -65,31 +63,50 @@
                 },
                 template: `
                     <div class="panel">
-                        <PanelHeading :heading="heading" :toggle="toggle" />
+                        
+                        <PanelHeading :toggle="toggle">
+                            <slot name="heading"></slot>
+                        </PanelHeading>
+                        
                         <PanelBody :show="show">
-                            <slot><slot>
+                            <slot name="body"><slot>
                         </PanelBody>
+                        
+                        <slot></slot>
                     </div>
                 `
             };
 
             new Vue({
-                components: { // "local registration" of the component we would like to use
+                components: {
                     Panel
                 },
                 el: '#root',
                 template: `
                     <div>
-                        <Panel heading="What is Vue?">
-                            <p>
-                                It is a frontend framework for building UI of web apps
-                            </p>
-                            <p>
-                                It was created by Evan You
-                            </p>
+                        <Panel>
+                            <template v-slot:heading>
+                                What is <strong>Vue</strong>?
+                            </template>
+
+                            <template v-slot:body>
+                                <p>
+                                    It is a frontend framework for building UI of web apps
+                                </p>
+                                <p>
+                                    It was created by Evan You
+                                </p>
+                            </template>
+
+                            <section>&copy; Vue JS</section>
                         </Panel>
-                        <Panel heading="What is JavaScript?">
-                            It is a language used to build frontend of web apps
+                        <Panel>
+                            <template v-slot:heading>
+                                What is <strong>JavaScript</strong>?
+                            </template>
+                            <template v-slot:body>
+                                It is a language used to build frontend of web apps
+                            </template>
                         </Panel>
                     </div>
                 `
