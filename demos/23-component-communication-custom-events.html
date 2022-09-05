@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Components</title>
+        <style>
+            .panel {
+                border: 1px solid navy;
+            }
+
+            .panel-heading,
+            .panel-body {
+                padding: 0.8em 1em;
+            }
+
+            .panel-heading {
+                background-color: navy;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            /**
+             * EXERCISE: Create a PanelBody to show the body of the panel. Pass whatever props is required for it.
+             */
+            const PanelBody = {
+                props: [ 'show', 'body' ],
+                template: `
+                    <div class="panel-body" v-show="show">{{body}}</div>
+                `
+            };
+
+            const PanelHeading = {
+                props: [ 'heading' ],
+                methods: {
+                    requestToggle() {
+                        // 1st arg -> name of the custom event
+                        // 2nd arg -> any extra data to be passed (like $event object)
+                        this.$emit( 'tg', { message: 'Hello parent. Please toggle..' } );
+                    }
+                },
+                template: `
+                    <div class="panel-heading" @click="requestToggle">{{heading}}</div>
+                `
+            };
+
+            const Panel = {
+                components: {
+                    PanelHeading,
+                    PanelBody
+                },
+                props: [ 'heading', 'body' ],
+                data() {
+                    return {
+                        show: true
+                    };
+                },
+                methods: {
+                    toggle( event ) {
+                        this.show = !this.show;
+                        console.log( event );
+                    }
+                },
+                template: `
+                    <div class="panel">
+                        <PanelHeading :heading="heading" @tg="toggle" />
+                        <PanelBody :show="show" :body="body" />
+                    </div>
+                `
+            };
+
+            new Vue({
+                components: { // "local registration" of the component we would like to use
+                    Panel
+                },
+                el: '#root',
+                template: `
+                    <div>
+                        <Panel heading="What is Vue?" body="It is a frontend framework for building UI of web apps" />
+                        <Panel heading="What is JavaScript?" body="It is a language used to build frontend of web apps" />
+                    </div>
+                `
+            })
+        </script>
+    </body>
+</html>
