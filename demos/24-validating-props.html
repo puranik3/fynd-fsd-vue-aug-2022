@@ -100,7 +100,7 @@
                     }
                 },
                 template: `
-                    <div class="panel" :class="theme === 'primary' ? 'panel-primary' : 'panel-secondary'">
+                    <div class="panel" :class="'panel-' + theme">
                         <PanelHeading :heading="heading" :toggle="toggle" />
                         <PanelBody :show="show" :body="body" />
                     </div>
@@ -121,7 +121,7 @@
                         />
                         <Panel
                             heading="What is JavaScript?"
-                            theme="tertiary"
+                            theme="secondary"
                         />
                     </div>
                 `
