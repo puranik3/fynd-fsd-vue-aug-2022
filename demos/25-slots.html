@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Components</title>
+        <style>
+            .panel {
+                border: 1px solid navy;
+            }
+
+            .panel-heading,
+            .panel-body {
+                padding: 0.8em 1em;
+            }
+
+            .panel-heading {
+                background-color: navy;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            /**
+             * EXERCISE: Create a PanelBody to show the body of the panel. Pass whatever props is required for it.
+             */
+            const PanelBody = {
+                props: [ 'show', 'body' ],
+                template: `
+                    <div class="panel-body" v-show="show">
+                        <slot><slot>
+                    </div>
+                `
+            };
+
+            const PanelHeading = {
+                props: [ 'heading', 'toggle' ],
+                template: `
+                    <div class="panel-heading" @click="toggle">{{heading}}</div>
+                `
+            };
+
+            const Panel = {
+                components: {
+                    PanelHeading,
+                    PanelBody
+                },
+                props: [ 'heading', 'body' ],
+                data() {
+                    return {
+                        show: true
+                    };
+                },
+                methods: {
+                    toggle() {
+                        this.show = !this.show;
+                        // console.log( this.heading ); // we can access props but we should not manipulate them
+                    }
+                },
+                template: `
+                    <div class="panel">
+                        <PanelHeading :heading="heading" :toggle="toggle" />
+                        <PanelBody :show="show">
+                            <slot><slot>
+                        </PanelBody>
+                    </div>
+                `
+            };
+
+            new Vue({
+                components: { // "local registration" of the component we would like to use
+                    Panel
+                },
+                el: '#root',
+                template: `
+                    <div>
+                        <Panel heading="What is Vue?">
+                            <p>
+                                It is a frontend framework for building UI of web apps
+                            </p>
+                            <p>
+                                It was created by Evan You
+                            </p>
+                        </Panel>
+                        <Panel heading="What is JavaScript?">
+                            It is a language used to build frontend of web apps
+                        </Panel>
+                    </div>
+                `
+            })
+        </script>
+    </body>
+</html>
