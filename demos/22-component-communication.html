@@ -27,16 +27,27 @@
         <script type="module">
             import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
 
-            const PanelHeading = {
-                props: [ 'h', 't' ],
+            /**
+             * EXERCISE: Create a PanelBody to show the body of the panel. Pass whatever props is required for it.
+             */
+            const PanelBody = {
+                props: [ 'show', 'body' ],
                 template: `
-                    <div class="panel-heading" @click="t">{{h}}</div>
+                    <div class="panel-body" v-show="show">{{body}}</div>
+                `
+            };
+
+            const PanelHeading = {
+                props: [ 'heading', 'toggle' ],
+                template: `
+                    <div class="panel-heading" @click="toggle">{{heading}}</div>
                 `
             };
 
             const Panel = {
                 components: {
-                    PanelHeading
+                    PanelHeading,
+                    PanelBody
                 },
                 props: [ 'heading', 'body' ],
                 data() {
@@ -47,12 +58,13 @@
                 methods: {
                     toggle() {
                         this.show = !this.show;
+                        // console.log( this.heading ); // we can access props but we should not manipulate them
                     }
                 },
                 template: `
                     <div class="panel">
-                        <PanelHeading :h="heading" :t="toggle" />
-                        <div class="panel-body" v-show="show">{{body}}</div>
+                        <PanelHeading :heading="heading" :toggle="toggle" />
+                        <PanelBody :show="show" :body="body" />
                     </div>
                 `
             };
