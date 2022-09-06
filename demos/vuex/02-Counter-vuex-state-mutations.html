@@ -50,7 +50,7 @@
                     </div>
                 `,
                 
-                // Define computed properties to get store properties
+                // Define computed properties to get store properties - val will change when store.state.value will change
                 computed: {
                     val() {
                         return store.state.value;
@@ -60,7 +60,7 @@
                 // Define methods that commit mutations
                 methods: {
                     dec() {
-                        store.commit( 'decrement' );
+                        store.commit( 'decrement' ); // name of the mutation is passed as a string
                     },
                     inc() {
                         store.commit( 'increment' );
