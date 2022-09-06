@@ -27,7 +27,8 @@
                 
                 // Add ```processing``` state property
                 state: {
-                    value: 0
+                    value: 0,
+                    isProcessing: false
                 },
                 // mutations change state synchronously (immediately)
                 mutations: {
@@ -36,21 +37,35 @@
                     },
                     decrementMutation( state ) {
                         state.value--;
+                    },
+                    // Define processingMutation mutation, that sets the value based on payload
+                    processingMutation( state, payload ) {
+                        state.isProcessing = payload;
                     }
                 },
 
-                // Define setProcessing mutation, that sets the value based on payload
-                // actions change state (using mutations eventually) asynchronously (after a delay)
-                actions: {
-                    incrementAction( context ) {
-                        setTimeout(() => {
-                            context.commit( 'incrementMutation' );
-                        }, 3000)
-                    }
-                },
 
                 // Add actions for increment and decrement - use setTimeout() to simulate a delay due to an async action
                 // Commit appropriate mutations at appropriate times
+                // actions change state (using mutations eventually) asynchronously (after a delay)
+                actions: {
+                    incrementAction( context ) {
+                        context.commit( 'processingMutation', true );
+
+                        setTimeout(() => {
+                            context.commit( 'incrementMutation' );
+                            context.commit( 'processingMutation', false );
+                        }, 3000)
+                    },
+                    decrementAction( context ) {
+                        context.commit( 'processingMutation', true );
+
+                        setTimeout(() => {
+                            context.commit( 'decrementMutation' );
+                            context.commit( 'processingMutation', false );
+                        }, 3000)
+                    }
+                },
                 
             });
             
@@ -58,12 +73,13 @@
                 // Add a spinner when processing - show it in place of value, when processing. Disable buttns when processing.
                 template: `
                     <div class="counter">
-                        <button @click="decrement" class="btn btn-dark btn-sm">-</button>
+                        <button @click="decrement" class="btn btn-dark btn-sm" :disabled="isProcessing">-</button>
                         
                         <!-- Spinner / value goes in here -->
-                        <span>{{value}}</span>
+                        <span class="spinner-grow spinner-grow-sm" v-if="isProcessing"></span>
+                        <span v-else>{{value}}</span>
                         
-                        <button @click="increment" class="btn btn-dark btn-sm">+</button>
+                        <button @click="increment" class="btn btn-dark btn-sm" :disabled="isProcessing">+</button>
                     </div>
                 `,
 
@@ -71,6 +87,9 @@
                 computed: {
                     value() {
                         return store.state.value;
+                    },
+                    isProcessing() {
+                        return store.state.isProcessing;
                     }
                 },
                 
@@ -81,7 +100,7 @@
                         store.dispatch( 'incrementAction' );
                     },
                     decrement() {
-                        store.commit( 'decrementMutation' );
+                        store.dispatch( 'decrementAction' );
                     }
                 }
             };
