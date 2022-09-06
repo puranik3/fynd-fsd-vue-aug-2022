@@ -32,10 +32,10 @@
                         <div v-if="error" class="bg-red-600 text-white p-1">
                             {{error.message}}
                         </div>
-                        <ol v-else class="grid gap-2 grid-cols-3">
-                            <li v-for="workshop in workshops" :key="workshop.id" class="w-[100%]">
-                                <div class="flex justify-center">
-                                    <div class="rounded-lg shadow-lg bg-white max-w-sm">
+                        <ol v-else class="grid gap-6 mb-10 grid-cols-4">
+                            <li v-for="workshop in workshops" :key="workshop.id">
+                                <div class="flex justify-center h-[100%]">
+                                    <div class="rounded-lg shadow-xl bg-white w-[100%] p-2">
                                         <a href="#!">
                                             <img class="rounded-t-lg h-[120px]" :src="workshop.imageUrl" :alt="workshop.name" />
                                         </a>
@@ -44,6 +44,7 @@
                                                 {{workshop.name}}
                                             </h5>
                                         </div>
+                                        <div v-html="workshop.description"></div>
                                     </div>
                                 </div>
                             </li>
