@@ -22,17 +22,28 @@
             
             const Counter = {
                 // Define data with value property
-
+                data() {
+                    return {
+                        value: 0
+                    }
+                },
                 // Bind data and methods
                 template: `
                     <div class="counter">
-                        <button class="btn btn-dark btn-sm">-</button>
-                        <span class="value"></span>
-                        <button class="btn btn-dark btn-sm">+</button>
+                        <button class="btn btn-dark btn-sm" @click="decrement">-</button>
+                        <span class="value">{{value}}</span>
+                        <button class="btn btn-dark btn-sm" @click="increment">+</button>
                     </div>
                 `,
-                
                 // Define methods
+                methods: {
+                    increment() {
+                        this.value++;
+                    },
+                    decrement() {
+                        this.value--;
+                    }
+                }
             };
 
             new Vue({
