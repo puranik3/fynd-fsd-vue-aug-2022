@@ -34,11 +34,11 @@
 
                 // Take value to increment/decrement by as payload (second argument), and modify the methods accordingly
                 mutations: {
-                    increment( state ) {
-                        state.value++;
+                    increment( state, payload ) {
+                        state.value += payload;
                     },
-                    decrement( state ) {
-                        state.value--;
+                    decrement( state, payload ) {
+                        state.value -= payload;
                     }
                 }
             });
@@ -52,7 +52,7 @@
                         
                         <div class="form-group">
                             <label for="change-amount">Change by amount</label>
-                            <input type="number" class="form-control d-inline-block change-amount" />
+                            <input type="number" class="form-control d-inline-block change-amount" v-model.number="changeAmount" />
                         </div>
                         <button @click="decrement" class="btn btn-dark btn-sm">-</button>
                         <div class="value">
@@ -63,7 +63,11 @@
                 `,
                 
                 // Add data to store amount to change by (changeAmount)
-
+                data() {
+                    return {
+                        changeAmount: 1
+                    }
+                },
                 computed: {
                     value() {
                         return store.state.value;
@@ -73,10 +77,10 @@
                 // Modify methods to pass payload
                 methods: {
                     increment() {
-                        store.commit( 'increment' );
+                        store.commit( 'increment', this.changeAmount );
                     },
                     decrement() {
-                        store.commit( 'decrement' );
+                        store.commit( 'decrement', this.changeAmount );
                     }
                 }
             };
