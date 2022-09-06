@@ -30,13 +30,21 @@
                     value: 0
                 },
 
-                // Define setProcessing mutation, that sets the value based on payload
                 mutations: {
-                    increment( state ) {
+                    incrementMutation( state ) {
                         state.value++;
                     },
-                    decrement( state ) {
+                    decrementMutation( state ) {
                         state.value--;
+                    }
+                },
+
+                // Define setProcessing mutation, that sets the value based on payload
+                actions: {
+                    incrementAction( context ) {
+                        setTimeout(() => {
+                            context.commit( 'incrementMutation' );
+                        }, 3000)
                     }
                 },
 
@@ -52,6 +60,7 @@
                         <button @click="decrement" class="btn btn-dark btn-sm">-</button>
                         
                         <!-- Spinner / value goes in here -->
+                        <span>{{value}}</span>
                         
                         <button @click="increment" class="btn btn-dark btn-sm">+</button>
                     </div>
@@ -64,8 +73,16 @@
                     }
                 },
                 
+                // Mutations are "commit"ed. Actions are "dispatch"ed
                 // Add methods that "dispatch" actions
-                
+                methods: {
+                    increment() {
+                        store.dispatch( 'incrementAction' );
+                    },
+                    decrement() {
+                        store.commit( 'decrementMutation' );
+                    }
+                }
             };
 
             new Vue({
