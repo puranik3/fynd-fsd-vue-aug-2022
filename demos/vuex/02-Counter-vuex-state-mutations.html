@@ -21,25 +21,51 @@
             import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
             
             // Include Vuex
-            // import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+            import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
 
             // Use Vuex in Vue (Vue.use())
+            Vue.use( Vuex );
             
             // Define store with state and mutations
+            const store = new Vuex.Store({
+                state: {
+                    value: 0
+                },
+                mutations: {
+                    increment( state ) {
+                        state.value++;
+                    },
+                    decrement( state ) {
+                        state.value--;
+                    }
+                }
+            });
             
             const Counter = {
                 template: `
                     <div class="counter">
-                        <button @click="decrement" class="btn btn-dark btn-sm">-</button>
-                        <span class="value">{{value}}</span>
-                        <button @click="increment" class="btn btn-dark btn-sm">+</button>
+                        <button @click="dec" class="btn btn-dark btn-sm">-</button>
+                        <span class="value">{{val}}</span>
+                        <button @click="inc" class="btn btn-dark btn-sm">+</button>
                     </div>
                 `,
                 
                 // Define computed properties to get store properties
+                computed: {
+                    val() {
+                        return store.state.value;
+                    }
+                },
                 
                 // Define methods that commit mutations
-                
+                methods: {
+                    dec() {
+                        store.commit( 'decrement' );
+                    },
+                    inc() {
+                        store.commit( 'increment' );
+                    }
+                }
             };
 
             new Vue({
