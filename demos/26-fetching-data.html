@@ -14,15 +14,17 @@
             import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
 
             new Vue({
-                el: '#root',
+                el: "#root",
                 data: {
                     workshops: [],
                     error: null,
-                    loading: true
+                    loading: true,
                 },
                 template: `
                     <div class="ml-[5%] mr-[5%] mt-10">
-                        <h1 class="text-xl font-bold">List of workshops</h1>
+                        <h1 class="text-xl font-bold">
+                            List of workshops
+                        </h1>
                         <hr class="mt-2 mb-2" />
                         <div v-if="loading" class="bg-blue-600 text-white p-1">
                             Workshops are being fetched. Please wait...
@@ -30,31 +32,44 @@
                         <div v-if="error" class="bg-red-600 text-white p-1">
                             {{error.message}}
                         </div>
-                        <ol v-else>
-                            <li v-for="workshop in workshops" :key="workshop.id">
-                                {{workshop.name}}
+                        <ol v-else class="grid gap-2 grid-cols-3">
+                            <li v-for="workshop in workshops" :key="workshop.id" class="w-[100%]">
+                                <div class="flex justify-center">
+                                    <div class="rounded-lg shadow-lg bg-white max-w-sm">
+                                        <a href="#!">
+                                            <img class="rounded-t-lg h-[120px]" :src="workshop.imageUrl" :alt="workshop.name" />
+                                        </a>
+                                        <div class="p-6">
+                                            <h5 class="text-gray-900 text-xl font-medium mb-2">
+                                                {{workshop.name}}
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
                         </ol>
                     </div>
                 `,
                 // "mounted" is a "lifecycle methods"
                 async mounted() {
-                    console.log( 'DOM is mounted' );
+                    console.log("DOM is mounted");
 
                     try {
-                        const response = await fetch( `https://workshops-server.herokuapp.com/workshops` );
+                        const response = await fetch(
+                            `https://workshops-server.herokuapp.com/workshops`
+                        );
 
-                        if( !response.ok ) {
-                            throw new Error( response.statusText ); // please check if this is the correct way to handle 404 / 500 kind of errors
+                        if (!response.ok) {
+                            throw new Error(response.statusText); // please check if this is the correct way to handle 404 / 500 kind of errors
                         }
 
                         this.workshops = await response.json();
-                    } catch( error ) {
+                    } catch (error) {
                         this.error = error;
-                    } finally {
-                        this.loading = false;
                     }
-                }
+
+                    this.loading = false;
+                },
             });
         </script>
     </body>
