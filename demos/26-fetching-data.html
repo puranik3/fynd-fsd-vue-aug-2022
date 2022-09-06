@@ -5,9 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Fetching data</title>
-        <style>
-            
-        </style>
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
         <div id="root"></div>
@@ -19,12 +17,20 @@
                 el: '#root',
                 data: {
                     workshops: [],
-                    error: null
+                    error: null,
+                    loading: true
                 },
                 template: `
-                    <div>
-                        <h1>List of workshops</h1>
-                        <ol>
+                    <div class="ml-[5%] mr-[5%] mt-10">
+                        <h1 class="text-xl font-bold">List of workshops</h1>
+                        <hr class="mt-2 mb-2" />
+                        <div v-if="loading" class="bg-blue-600 text-white p-1">
+                            Workshops are being fetched. Please wait...
+                        </div>
+                        <div v-if="error" class="bg-red-600 text-white p-1">
+                            {{error.message}}
+                        </div>
+                        <ol v-else>
                             <li v-for="workshop in workshops" :key="workshop.id">
                                 {{workshop.name}}
                             </li>
@@ -45,6 +51,8 @@
                         this.workshops = await response.json();
                     } catch( error ) {
                         this.error = error;
+                    } finally {
+                        this.loading = false;
                     }
                 }
             });
