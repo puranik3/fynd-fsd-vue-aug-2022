@@ -29,7 +29,7 @@
                 state: {
                     value: 0
                 },
-
+                // mutations change state synchronously (immediately)
                 mutations: {
                     incrementMutation( state ) {
                         state.value++;
@@ -40,6 +40,7 @@
                 },
 
                 // Define setProcessing mutation, that sets the value based on payload
+                // actions change state (using mutations eventually) asynchronously (after a delay)
                 actions: {
                     incrementAction( context ) {
                         setTimeout(() => {
