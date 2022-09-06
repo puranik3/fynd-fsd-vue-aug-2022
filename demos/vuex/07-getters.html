@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <style>
+            .value {
+                display: inline-block;
+                width: 30px;
+                text-align: center;
+            }
+
+            .change-amount {
+                width: 64px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.js"></script>
+
+        <script type="module">
+            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
+            import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+
+            function fetchWorkshops() {
+                return axios.get( `http://workshops-server.herokuapp.com/workshops` )
+                            .then( response => response.data );
+            }
+
+            Vue.use( Vuex );
+
+            const store = new Vuex.Store({
+                state: {
+                    processing: false,
+                    workshops: [],
+                    error: null
+                },
+
+                // Define numWorkshops getter - it receives a "getters" object as the second argument. From numWorkshops() return an object wih shape { any: number, online: number, inPerson: number }
+                
+
+                mutations: {
+                    workshops( state, payload ) {
+                        state.workshops = payload;
+                    },
+                    error( state, payload ) {
+                        state.error = payload;
+                    },
+                    processing( state, payload ) {
+                        state.processing = payload;
+                    }
+                },
+
+
+                actions: {
+                    fetchWorkshops( context, payload ) {
+                        context.commit( 'processing', true );
+
+                        return fetchWorkshops()
+                                    .then( workshops => {
+                                        context.commit( 'workshops', workshops );
+                                        context.commit( 'processing', false );
+
+                                        return workshops;
+                                    })
+                                    .catch( error => {
+                                        context.commit( 'error', error );
+                                        context.commit( 'processing', false );
+
+                                        throw error;
+                                    });
+                    }
+                }
+            });
+            
+            const WorkshopsList = {
+                template: `
+                    <div>
+                        <h1>List of workshops</h1>
+                        <hr />
+                        <div class="alert alert-info" role="alert" v-if="processing">
+                            <strong>We are fetching workshops...Hang on!</strong>
+                        </div>
+                        <div v-else>
+                            <div class="alert alert-danger" role="alert" v-if="error">
+                                <strong>{{error.message}}</strong>
+                            </div>
+                            <div v-else>
+                                
+                                <!-- Define a section to show workshop statistics based on modes -->
+                                <div class="text-center text-muted text-small mb-2">
+                                    <small class="mr-2"></small>
+                                    <small class="mr-2"></small>
+                                    <small class="mr-2"></small>
+                                </div>
+
+                                <ul class="list-group">
+                                    <li class="list-group-item clearfix" v-for="workshop in workshops" :key="workshop.id">
+                                        {{workshop.name}}
+                                        <div class="float-right">
+                                            <span class="badge" :class="available( workshop, 'online' )">Online</span>
+                                            <span class="badge" :class="available( workshop, 'inPerson' )">In-person</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                
+                // Add numWorkshops to expose store.getters.numWorkshops
+                computed: {
+                    processing() {
+                        return store.state.processing;
+                    },
+                    workshops() {
+                        return store.state.workshops;
+                    },
+                    error() {
+                        return store.state.error;
+                    }
+                },
+                methods: {
+                    available( workshop, mode ) {
+                        return {
+                            'badge-success': workshop.modes[mode],
+                            'badge-secondary': !workshop.modes[mode]
+                        }
+                    }
+                },
+                created() {
+                    store.dispatch( 'fetchWorkshops' )
+                         .then( workshops => console.log( 'received : ', workshops ) )
+                         .catch( error => console.log( 'error : ', error.message ) );
+                }
+            };
+
+            new Vue({
+                el: '#app',
+                components: {
+                    WorkshopsList
+                },
+                template: `
+                    <div id="app" class="container my-4">
+                        <WorkshopsList />
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>

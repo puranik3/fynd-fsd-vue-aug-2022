@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <style>
+            .value {
+                display: inline-block;
+                min-width: 30px;
+                text-align: center;
+            }
+
+            .change-amount {
+                max-width: 128px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
+            import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+
+            Vue.use( Vuex );
+
+            const store = new Vuex.Store({
+                state: {
+                    processing: false,
+                    value: 0
+                },
+
+                // Take value to increment/decrement by as payload (second argument), and modify the methods accordingly
+                mutations: {
+                    increment( state ) {
+                        state.value++;
+                    },
+                    decrement( state ) {
+                        state.value--;
+                    },
+                    setProcessing( state, payload ) {
+                        state.processing = payload;
+                    }
+                },
+
+                // Take value to increment/decrement by as payload (second argument), and modify the actions accordingly
+                actions: {
+                    increment( context ) {
+                        context.commit( 'setProcessing', true );
+
+                        setTimeout(() => {
+                            context.commit( 'increment' );
+                            context.commit( 'setProcessing', false );
+                        }, 2000);
+                    },
+                    decrement( context ) {
+                        context.commit( 'setProcessing', true );
+
+                        setTimeout(() => {
+                            context.commit( 'decrement' );
+                            context.commit( 'setProcessing', false );
+                        }, 2000);
+                    }
+                }
+            });
+            
+            const Counter = {
+                // NOTE: We have added the input to accept changeAmount
+                template: `
+                    <div class="counter">
+                        <div class="form-group">
+                            <label for="change-amount">Change by amount</label>
+                            <input type="number" v-model.number="changeAmount" value="1" class="form-control d-inline-block change-amount" />
+                        </div>
+                        <button @click="decrement" class="btn btn-dark btn-sm" :disabled="processing">-</button>
+                        <div class="value">
+                            <div class="spinner-grow spinner-grow-sm" role="status" v-if="processing">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <span v-else>{{value}}</span>
+                        </div>
+                        <button @click="increment" class="btn btn-dark btn-sm" :disabled="processing">+</button>
+                    </div>
+                `,
+
+                // NOTE: We have added changeAmount as data
+                data() {
+                    return {
+                        changeAmount: 1
+                    };
+                },
+                computed: {
+                    value() {
+                        return store.state.value;
+                    },
+                    processing() {
+                        return store.state.processing;
+                    }
+                },
+
+                // Modify methods to pass payload
+                methods: {
+                    increment() {
+                        store.dispatch( 'increment' );
+                    },
+                    decrement() {
+                        store.dispatch( 'decrement' );
+                    }
+                }
+            };
+
+            new Vue({
+                el: '#app',
+                components: {
+                    Counter
+                },
+                template: `
+                    <div id="app" class="container my-4">
+                        <h1>Counter</h1>
+                        <hr />
+                        <Counter />
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>

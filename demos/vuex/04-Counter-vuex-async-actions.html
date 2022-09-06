@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <style>
+            .value {
+                display: inline-block;
+                min-width: 30px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
+            import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+
+            Vue.use( Vuex );
+
+            const store = new Vuex.Store({
+                
+                // Add ```processing``` state property
+                state: {
+                    value: 0
+                },
+
+                // Define setProcessing mutation, that sets the value based on payload
+                mutations: {
+                    increment( state ) {
+                        state.value++;
+                    },
+                    decrement( state ) {
+                        state.value--;
+                    }
+                },
+
+                // Add actions for increment and decrement - use setTimeout() to simulate a delay due to an async action
+                // Commit appropriate mutations at appropriate times
+                
+            });
+            
+            const Counter = {
+                // Add a spinner when processing - show it in place of value, when processing. Disable buttns when processing.
+                template: `
+                    <div class="counter">
+                        <button @click="decrement" class="btn btn-dark btn-sm">-</button>
+                        
+                        <!-- Spinner / value goes in here -->
+                        
+                        <button @click="increment" class="btn btn-dark btn-sm">+</button>
+                    </div>
+                `,
+
+                // Add computed property for processing as well
+                computed: {
+                    value() {
+                        return store.state.value;
+                    }
+                },
+                
+                // Add methods that "dispatch" actions
+                
+            };
+
+            new Vue({
+                el: '#app',
+                components: {
+                    Counter
+                },
+                template: `
+                    <div id="app" class="container my-4">
+                        <h1>Counter</h1>
+                        <hr />
+                        <Counter />
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
