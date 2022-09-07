@@ -28,7 +28,7 @@
             import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
 
             function fetchWorkshops() {
-                return axios.get( `http://workshops-server.herokuapp.com/workshops` )
+                return axios.get( `https://workshops-server.herokuapp.com/workshops` )
                             .then( response => response.data );
             }
 
@@ -39,7 +39,54 @@
             // Add appropriate state properties
             // Add necessary mutations (that accept payload)
             // Add an action, say fetchWorkshops, that fetches workshops and returns a promise
-            
+            const store = new Vuex.Store({
+                state: {
+                    workshops: [],
+                    error: null,
+                    loading: false
+                },
+                mutations: {
+                    setLoading( state, payload ) {
+                        console.log( 'payload = ', payload );
+
+                        state.loading = payload.loading;
+                    },
+                    setWorkshops( state, payload ) {
+                        state.workshops = payload.workshops;
+                    },
+                    setError( state, payload ) {
+                        state.error = payload.error;
+                    }
+                },
+                actions: {
+                    async fetchWorkshops( { commit } ) {
+                        // object form of commiting mutation
+                        commit({
+                            type: 'setLoading', // name of the mutation
+                            loading: true 
+                        });
+
+                        try {
+                            const workshops = await fetchWorkshops();
+                            commit({
+                                type: 'setWorkshops',
+                                // workshops: workshops
+                                workshops
+                            });
+                        } catch( error ) {
+                            commit({
+                                type: 'setError',
+                                error
+                            });
+                        } finally {
+                            commit({
+                                type: 'setLoading',
+                                loading: false
+                            });
+                        }
+                    }
+                }
+            })
 
             const WorkshopsList = {
                 template: `
@@ -53,16 +100,16 @@
                             
                             <!-- Setup binding to show error message on error / workshops on success -->
                             
-                            <div class="alert alert-danger" role="alert">
-                                <strong><!-- Error message goes in here --></strong>
+                            <div class="alert alert-danger" role="alert" v-if="error">
+                                <strong>{{error.message}}</strong>
                             </div>
                             <ul class="list-group" v-else>
-                                <li class="list-group-item clearfix">
-                                    <!-- Name of workshop goes in here -->
+                                <li class="list-group-item clearfix" v-for="workshop in workshops" :key="workshop.id">
+                                    {{workshop.name}}
                                     <div class="float-right">
                                         <!-- Set style using the available() helper --> 
-                                        <span class="badge">Online</span>
-                                        <span class="badge">In-person</span>
+                                        <span class="badge" :class="available( workshop, 'online' )">Online</span>
+                                        <span class="badge" :class="available( workshop, 'inPerson' )">In-person</span>
                                     </div>
                                 </li>
                             </ul>
@@ -71,6 +118,17 @@
                 `,
                 
                 // Set up computed properties
+                computed: {
+                    processing() {
+                        return store.state.loading;
+                    },
+                    error() {
+                        return store.state.error;
+                    },
+                    workshops() {
+                        return store.state.workshops;
+                    }
+                },
                 
                 // Helper method for styling the mode display of a workshop
                 methods: {
@@ -82,9 +140,18 @@
                     }
                 },
                 
-                created() {
-                    // Dispatch fetchWorkshops action -> log on success and error
+                mounted() {
+                    console.log( 'mounted : ', document.querySelector( '.alert' ) ); // null
                     
+                    // Dispatch fetchWorkshops action -> log on success and error
+                    store.dispatch({
+                        type: 'fetchWorkshops'
+                    });
+                },
+
+                // this lifecycle method is called before the component shows up
+                created() {
+                    console.log( 'created : ', document.querySelector( '.alert' ) ); // null
                 }
             };
 
