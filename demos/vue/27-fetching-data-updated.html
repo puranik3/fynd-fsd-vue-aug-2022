@@ -61,7 +61,7 @@
                     nextPage() {
                         if( this.workshops.length !== 0 ) {
                             this.page++;
-                            this.fetchWorkshops();
+                            // this.fetchWorkshops();
                         }
                     },
                     async fetchWorkshops() {
@@ -82,6 +82,12 @@
                         }
 
                         this.loading = false;
+                    }
+                },
+                // watchers are useful for executing some logic, when some piece of data changes
+                watch: {
+                    page( newPage, oldPage ) {
+                        this.fetchWorkshops();
                     }
                 },
                 // "mounted" is a "lifecycle methods"
