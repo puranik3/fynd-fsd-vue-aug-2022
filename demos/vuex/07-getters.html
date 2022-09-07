@@ -42,7 +42,17 @@
                 },
 
                 // Define numWorkshops getter - it receives a "getters" object as the second argument. From numWorkshops() return an object wih shape { any: number, online: number, inPerson: number }
-                
+                getters: {
+                    numWorkshops( state ) {
+                        return state.workshops.length;
+                    },
+                    numInPerson( state ) {
+                        return 1;
+                    },
+                    numOnline( state ) {
+                        return 1;
+                    }
+                },
 
                 mutations: {
                     workshops( state, payload ) {
@@ -94,7 +104,7 @@
                                 
                                 <!-- Define a section to show workshop statistics based on modes -->
                                 <div class="text-center text-muted text-small mb-2">
-                                    <small class="mr-2"></small>
+                                    Total number of workshops: <small class="mr-2">{{numWorkshops}}</small>
                                     <small class="mr-2"></small>
                                     <small class="mr-2"></small>
                                 </div>
@@ -123,6 +133,9 @@
                     },
                     error() {
                         return store.state.error;
+                    },
+                    numWorkshops() {
+                        return store.getters.numWorkshops;
                     }
                 },
                 methods: {
