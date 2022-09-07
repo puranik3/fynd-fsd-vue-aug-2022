@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Fetching data</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            new Vue({
+                el: "#root",
+                data: {
+                    workshops: [],
+                    error: null,
+                    loading: true,
+                    page: 1
+                },
+                template: `
+                    <div class="ml-[5%] mr-[5%] mt-10">
+                        <h1 class="text-xl font-bold">
+                            List of workshops
+                        </h1>
+                        <hr class="mt-2 mb-2" />
+                        <div v-if="loading" class="bg-blue-600 text-white p-1">
+                            Workshops are being fetched. Please wait...
+                        </div>
+                        <div v-if="error" class="bg-red-600 text-white p-1">
+                            {{error.message}}
+                        </div>
+                        <div v-else>
+                            <button @click="nextPage" class="border border-solid border-black p-2">Next page</button>
+                            You are viewing page <span class="page">{{page}}</span>
+                            <div v-if="workshops.length === 0">No more workshops</div>
+                            <ol class="grid gap-6 mb-10 grid-cols-4">
+                                <li v-for="workshop in workshops" :key="workshop.id">
+                                    <div class="flex justify-center h-[100%]">
+                                        <div class="rounded-lg shadow-xl bg-white w-[100%] p-2">
+                                            <a href="#!">
+                                                <img class="rounded-t-lg h-[120px]" :src="workshop.imageUrl" :alt="workshop.name" />
+                                            </a>
+                                            <div class="p-6">
+                                                <h5 class="text-gray-900 text-xl font-medium mb-2">
+                                                    {{workshop.name}}
+                                                </h5>
+                                            </div>
+                                            <div v-html="workshop.description"></div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                `,
+                methods: {
+                    nextPage() {
+                        if( this.workshops.length !== 0 ) {
+                            this.page++;
+                            this.fetchWorkshops();
+                        }
+                    },
+                    async fetchWorkshops() {
+                        this.loading = true;
+
+                        try {
+                            const response = await fetch(
+                                `https://workshops-server.herokuapp.com/workshops?_page=${this.page}`
+                            );
+
+                            if (!response.ok) {
+                                throw new Error(response.statusText); // please check if this is the correct way to handle 404 / 500 kind of errors
+                            }
+
+                            this.workshops = await response.json();
+                        } catch (error) {
+                            this.error = error;
+                        }
+
+                        this.loading = false;
+                    }
+                },
+                // "mounted" is a "lifecycle methods"
+                mounted() {
+                    console.log("DOM is mounted");
+                    this.fetchWorkshops();
+                },
+                // before data changes, updated lifecycle method is called
+                beforeUpdate() {
+                    console.log( 'beforeUpdate | page number shown is ' + document.querySelector( '.page' ).innerText );
+                    // console.log( 'beforeUpdate | page is right now ' + this.page + ' and is about to be changed' );    
+                },
+                // when any data changes, updated lifecycle method is called
+                updated() {
+                    console.log( 'update | page number shown is ' + document.querySelector( '.page' ).innerText );
+                    // console.log( 'update | page changed to ' + this.page );
+                    // this.fetchWorkshops();
+                }
+            });
+        </script>
+    </body>
+</html>

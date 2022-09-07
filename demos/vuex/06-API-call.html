@@ -73,11 +73,15 @@
                                 // workshops: workshops
                                 workshops
                             });
+                            
+                            return workshops;
                         } catch( error ) {
                             commit({
                                 type: 'setError',
                                 error
                             });
+
+                            throw error;
                         } finally {
                             commit({
                                 type: 'setLoading',
@@ -140,13 +144,18 @@
                     }
                 },
                 
-                mounted() {
+                async mounted() {
                     console.log( 'mounted : ', document.querySelector( '.alert' ) ); // null
-                    
-                    // Dispatch fetchWorkshops action -> log on success and error
-                    store.dispatch({
-                        type: 'fetchWorkshops'
-                    });
+
+                    try {
+                        // Dispatch fetchWorkshops action -> log on success and error
+                        const workshops = await store.dispatch({
+                            type: 'fetchWorkshops'
+                        });
+                        console.log( 'workshops = ', workshops );
+                    } catch( error ) {
+                        console.log( 'error = ', error );
+                    }
                 },
 
                 // this lifecycle method is called before the component shows up
