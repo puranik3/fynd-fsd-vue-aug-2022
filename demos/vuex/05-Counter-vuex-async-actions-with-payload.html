@@ -35,11 +35,11 @@
 
                 // Take value to increment/decrement by as payload (second argument), and modify the methods accordingly
                 mutations: {
-                    increment( state ) {
-                        state.value++;
+                    increment( state, payload ) {
+                        state.value += payload;
                     },
-                    decrement( state ) {
-                        state.value--;
+                    decrement( state, payload ) {
+                        state.value -= payload;
                     },
                     setProcessing( state, payload ) {
                         state.processing = payload;
@@ -48,19 +48,19 @@
 
                 // Take value to increment/decrement by as payload (second argument), and modify the actions accordingly
                 actions: {
-                    increment( context ) {
+                    increment( context, payload ) {
                         context.commit( 'setProcessing', true );
 
                         setTimeout(() => {
-                            context.commit( 'increment' );
+                            context.commit( 'increment', payload );
                             context.commit( 'setProcessing', false );
                         }, 2000);
                     },
-                    decrement( context ) {
+                    decrement( context, payload ) {
                         context.commit( 'setProcessing', true );
 
                         setTimeout(() => {
-                            context.commit( 'decrement' );
+                            context.commit( 'decrement', payload );
                             context.commit( 'setProcessing', false );
                         }, 2000);
                     }
@@ -104,10 +104,10 @@
                 // Modify methods to pass payload
                 methods: {
                     increment() {
-                        store.dispatch( 'increment' );
+                        store.dispatch( 'increment', this.changeAmount );
                     },
                     decrement() {
-                        store.dispatch( 'decrement' );
+                        store.dispatch( 'decrement', this.changeAmount );
                     }
                 }
             };
