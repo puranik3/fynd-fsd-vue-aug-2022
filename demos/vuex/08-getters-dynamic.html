@@ -38,11 +38,17 @@
 
                 // Define a workshopsWithMode getter (dynamic getter that accepts a mode - 'any' |'online' | 'inPerson', and returns the number of workshops for the mode). Use it in numWorkshops.
                 getters: {
-                    numWorkshops( state, getters ) {
-                        return {
-                            any: state.workshops.length,
-                            online: state.workshops.filter( workshop => workshop.modes.online ).length,
-                            inPerson: state.workshops.filter( workshop => workshop.modes.inPerson ).length
+                    numWorkshopsWithMode( state, getters ) {
+                        return function( mode ) {
+                            if( mode === 'any' ) {
+                                return state.workshops.length;
+                            }
+
+                            if( mode === 'online' || mode === 'inPerson' ) {
+                                return state.workshops.filter( w => w.modes[mode] === true ).length;
+                            }
+
+                            return 0;
                         };
                     }
                 },
@@ -93,14 +99,12 @@
                             </div>
                             <div v-else>
                                 <div class="text-center text-muted text-small mb-2">
-                                    <small class="mr-2">Total: {{numWorkshops.any}}</small>
-                                    <small class="mr-2">Online: {{numWorkshops.online}}</small>
-                                    <small>In-person: {{numWorkshops.inPerson}}</small>
+                                    <small class="mr-2">Number of workshops of type {{mode}}: {{numWorkshopsWithMode}}</small>
                                 </div>
 
                                 <!-- Add a select to set data property mode -->
                                 <div class="text-center mb-2">
-                                    <select>
+                                    <select v-model="mode">
                                         <option value="" disabled>-- Filter by mode --</option>
                                         <option value="any">Any</option>
                                         <option value="online">Online</option>
@@ -112,7 +116,7 @@
                                     Display workshops for selected mode -> filter workshops using workshopsWithMode
                                 -->
                                 <ul class="list-group">
-                                    <li class="list-group-item clearfix">
+                                    <li class="list-group-item clearfix" v-for="workshop in workshops" :key="workshop.id">
                                         {{workshop.name}}
                                         <div class="float-right">
                                             <span class="badge" :class="available( workshop, 'online' )">Online</span>
@@ -126,7 +130,11 @@
                 `,
 
                 // Add a data property - mode, to hold current mode for which workshops are to be shown - by default it should be 'any'
-                
+                data() {
+                    return {
+                        mode: ''
+                    }
+                },
 
                 // Add a computed workshopsWithMode
                 computed: {
@@ -139,8 +147,8 @@
                     error() {
                         return store.state.error;
                     },
-                    numWorkshops() {
-                        return store.getters.numWorkshops;
+                    numWorkshopsWithMode() {
+                        return store.getters.numWorkshopsWithMode( this.mode );
                     }
                 },
                 methods: {
