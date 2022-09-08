@@ -98,9 +98,17 @@
                     // Vuex.mapActions()
                     // Has both object form (enables renaming of property) and array form
                     // The payload is forwarded to the mutation - therefore payload is to be passed to these generated methods
+                    // ...{
+                    //     increment( payload ) {
+                    //         this.$store.dispatch( 'increment', payload );
+                    //     },
+                    //     decrement( payload ) {
+                    //         this.$store.dispatch( 'decrement', payload );
+                    //     }
+                    // }
                     
                     // Use Vuex.mapActions to map increment and decrement
-                    
+                    ...Vuex.mapActions( [ 'increment', 'decrement' ] )
                 }
             };
 
