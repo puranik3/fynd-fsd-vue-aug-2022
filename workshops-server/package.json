@@ -4,7 +4,7 @@
     "description": "json-server based server to serve details of event for the events app",
     "main": "index.js",
     "scripts": {
-        "start": "npm run noauth",
+        "start": "npm run auth",
         "noauth": "node server-not-authenticated.js",
         "auth": "node server-authenticated.js"
     },
