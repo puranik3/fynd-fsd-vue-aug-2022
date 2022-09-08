@@ -139,16 +139,16 @@
                 // Add a computed workshopsWithMode
                 computed: {
                     processing() {
-                        return store.state.processing;
+                        return this.$store.state.processing;
                     },
                     workshops() {
-                        return store.state.workshops;
+                        return this.$store.state.workshops;
                     },
                     error() {
-                        return store.state.error;
+                        return this.$store.state.error;
                     },
                     numWorkshopsWithMode() {
-                        return store.getters.numWorkshopsWithMode( this.mode );
+                        return this.$store.getters.numWorkshopsWithMode( this.mode );
                     }
                 },
                 methods: {
@@ -168,6 +168,8 @@
 
             new Vue({
                 el: '#app',
+                // store: store,
+                store,
                 components: {
                     WorkshopsList
                 },

@@ -29,27 +29,26 @@
 
             Vue.use( Vuex );
 
-            let store = new Vuex.Store({
+            const store = new Vuex.Store({
                 state: {
                     processing: false,
                     workshops: [],
                     error: null
                 },
+
+                // Define a workshopsWithMode getter (dynamic getter that accepts a mode - 'any' |'online' | 'inPerson', and returns the number of workshops for the mode). Use it in numWorkshops.
                 getters: {
-                    numWorkshops( state ) {
-                        return {
-                            any: state.workshops.length,
-                            online: state.workshops.filter( workshop => workshop.modes.online ).length,
-                            inPerson: state.workshops.filter( workshop => workshop.modes.inPerson ).length
-                        };
-                    },
-                    workshopsWithMode( state ) {
+                    numWorkshopsWithMode( state, getters ) {
                         return function( mode ) {
                             if( mode === 'any' ) {
-                                return state.workshops;
-                            } else {
-                                return state.workshops.filter( workshop => workshop.modes[mode] );
+                                return state.workshops.length;
                             }
+
+                            if( mode === 'online' || mode === 'inPerson' ) {
+                                return state.workshops.filter( w => w.modes && w.modes[mode] === true ).length;
+                            }
+
+                            return 0;
                         };
                     }
                 },
@@ -100,10 +99,10 @@
                             </div>
                             <div v-else>
                                 <div class="text-center text-muted text-small mb-2">
-                                    <small class="mr-2">Total: {{numWorkshops.any}}</small>
-                                    <small class="mr-2">Online: {{numWorkshops.online}}</small>
-                                    <small>In-person: {{numWorkshops.inPerson}}</small>
+                                    <small class="mr-2">Number of workshops of type {{mode}}: {{numWorkshopsWithMode}}</small>
                                 </div>
+
+                                <!-- Add a select to set data property mode -->
                                 <div class="text-center mb-2">
                                     <select v-model="mode">
                                         <option value="" disabled>-- Filter by mode --</option>
@@ -112,8 +111,12 @@
                                         <option value="inPerson">In-person</option>
                                     </select>
                                 </div>
+
+                                <!-- 
+                                    Display workshops for selected mode -> filter workshops using workshopsWithMode
+                                -->
                                 <ul class="list-group">
-                                    <li class="list-group-item clearfix" v-for="workshop in workshopsWithMode( mode )" :key="workshop.id">
+                                    <li class="list-group-item clearfix" v-for="workshop in workshops" :key="workshop.id">
                                         {{workshop.name}}
                                         <div class="float-right">
                                             <span class="badge" :class="available( workshop, 'online' )">Online</span>
@@ -125,28 +128,27 @@
                         </div>
                     </div>
                 `,
+
+                // Add a data property - mode, to hold current mode for which workshops are to be shown - by default it should be 'any'
                 data() {
                     return {
                         mode: 'any'
-                    };
+                    }
                 },
 
-                // Switch to store exposed on the Vue component instance
+                // Add a computed workshopsWithMode
                 computed: {
                     processing() {
-                        return store.state.processing;
+                        return this.$store.state.processing;
                     },
                     workshops() {
-                        return store.state.workshops;
+                        return this.$store.state.workshops;
                     },
                     error() {
-                        return store.state.error;
+                        return this.$store.state.error;
                     },
-                    numWorkshops() {
-                        return store.getters.numWorkshops;
-                    },
-                    workshopsWithMode( mode ) {
-                        return store.getters.workshopsWithMode;
+                    numWorkshopsWithMode() {
+                        return this.$store.getters.numWorkshopsWithMode( this.mode );
                     }
                 },
                 methods: {
@@ -157,8 +159,6 @@
                         }
                     }
                 },
-
-                // Switch to store exposed on the Vue component instance
                 created() {
                     store.dispatch( 'fetchWorkshops' )
                          .then( workshops => console.log( 'received : ', workshops ) )
@@ -166,9 +166,10 @@
                 }
             };
 
-            // Add a store property to the root Vue instance to expose the store to all components in the app (and this root instance as well)
             new Vue({
                 el: '#app',
+                // store: store,
+                store,
                 components: {
                     WorkshopsList
                 },
@@ -178,9 +179,6 @@
                     </div>
                 `,
             });
-
-            // Just for understanding sake, we can remove the global reference to the store - uncomment the next line
-            // store = null;
         </script>
     </body>
 </html>
