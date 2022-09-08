@@ -1,19 +1,18 @@
 <template>
   <div id="app">
-    <AppHome />
-    <WorkshopsList />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import AppHome from './components/AppHome.vue'
-import WorkshopsList from './components/WorkshopsList.vue';
+// import AppHome from './components/AppHome.vue'
+// import WorkshopsList from './components/WorkshopsList.vue';
 
 export default {
   name: 'App',
   components: {
-    AppHome,
-    WorkshopsList,
+    // AppHome,
+    // WorkshopsList,
   }
 }
 </script>

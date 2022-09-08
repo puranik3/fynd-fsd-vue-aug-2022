@@ -3,6 +3,7 @@ import AppHome from '../components/AppHome';
 import WorkshopsList from '../components/WorkshopsList';
 
 const router = new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',
