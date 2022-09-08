@@ -138,9 +138,30 @@
                     // Object form (more general as computed property is decided by you, and local state can be used as well in computation) - Expose processing by mapping to a string / function that gets state
                     // Array form (not customizable) - Expose workshops and error using the array form
                     
+                    // what is returned
+                    // {
+                    //     isProcessing() {
+                    //         return this.$store.state.processing;
+                    //     }
+                    // }
+                    // we can copy over the returned object's properties (isProcessing)
+                    ...Vuex.mapState({
+                        isProcessing: 'processing',
+                    }),
+
+                    // {
+                    //     workshops() {
+                    //         return this.$store.state.workshops;
+                    //     },
+                    //     error() {
+                    //         return this.$store.state.error;
+                    //     }
+                    // }
+                    ...Vuex.mapState([ 'workshops', 'error' ]),
+                    
                     // Vuex.mapGetters() - works similar to mapState() but for getters
                     // Expose numWorkshops and workshopsWithMode
-                    
+                    ...Vuex.mapGetters( [ 'numWorkshops', 'workshopsWithMode' ] )
                 },
                 methods: {
                     available( workshop, mode ) {
