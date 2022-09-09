@@ -1,34 +1,56 @@
 <template>
     <main>
         <h1>List of workshops</h1>
-        <hr/>
-        <ol>
-            <li v-for="workshop in workshops" :key="workshop.id">
-                {{workshop.name}}
-            </li>
-        </ol>
+        <hr />
+        <div class="row">
+            <div
+                class="col-12 col-lg-4 d-flex"
+                v-for="workshop in workshops"
+                :key="workshop.id"
+            >
+                <b-card
+                    :title="workshop.name"
+                    :img-src="workshop.imageUrl"
+                    :img-alt="workshop.name"
+                    img-top
+                    tag="article"
+                    class="w-100 p-3 my-3 workshop"
+                >
+                    <b-card-text>
+                        <div>{{workshop.startDate}} - {{workshop.endDate}}</div>
+                        <div>{{workshop.time}}</div>
+                    </b-card-text>
+
+                    <b-button :to="{ name: 'workshop-details' }" variant="primary">Know more</b-button>
+                </b-card>
+            </div>
+        </div>
     </main>
 </template>
 
 <script>
 // @ -> with respect to src folder
-import { getWorkshops } from '@/services/workshops.js';
+import { getWorkshops } from "@/services/workshops.js";
 
 export default {
-    name: 'WorkshopsList',
+    name: "WorkshopsList",
     data() {
         return {
-            workshops: []
-        }
+            workshops: [],
+        };
     },
     async mounted() {
         this.workshops = await getWorkshops();
-    }
-}
+    },
+};
 </script>
 
 <style scoped>
-/* h1 {
-    color: crimson;
-} */
+.workshop img {
+    display: block;
+    height: 120px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+}
 </style>
