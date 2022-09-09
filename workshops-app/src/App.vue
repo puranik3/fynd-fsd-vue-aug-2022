@@ -1,18 +1,19 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <AppMenu />
+    <div class="my-5">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-// import AppHome from './components/AppHome.vue'
-// import WorkshopsList from './components/WorkshopsList.vue';
+import AppMenu from './components/AppMenu.vue';
 
 export default {
   name: 'App',
   components: {
-    // AppHome,
-    // WorkshopsList,
+    AppMenu
   }
 }
 </script>
@@ -24,6 +25,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
