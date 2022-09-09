@@ -27,7 +27,8 @@
                         <div>{{workshop.time}}</div>
                     </b-card-text>
 
-                    <b-button :to="{ name: 'workshop-details' }" variant="primary">Know more</b-button>
+                    <!-- <b-button :to="'/workshops/' + workshop.id" variant="primary">Know more</b-button> -->
+                    <b-button :to="{ name: 'workshop-details', params: { id: workshop.id } }" variant="primary">Know more</b-button>
                 </b-card>
             </div>
         </div>
