@@ -2,7 +2,13 @@
     <main>
         <h1>List of workshops</h1>
         <hr />
-        <div class="row">
+        <div class="d-flex justify-content-center mb-3" v-if="loading">
+            <b-spinner label="Loading..." class="spinner-lg"></b-spinner>
+        </div>
+        <b-alert variant="danger" v-if="error" show>
+            {{error.message}}
+        </b-alert>
+        <div class="row" v-if="workshops.length !== 0">
             <div
                 class="col-12 col-lg-4 d-flex"
                 v-for="workshop in workshops"
@@ -37,11 +43,21 @@ export default {
     data() {
         return {
             format: 'indian',
+            loading: false,
             workshops: [],
+            error: null
         };
     },
     async mounted() {
-        this.workshops = await getWorkshops();
+        this.loading = true;
+
+        try {
+            this.workshops = await getWorkshops();
+        } catch( error ) {
+            this.error = error;
+        } finally {
+            this.loading = false;
+        }
     },
 };
 </script>

@@ -30,4 +30,9 @@ h1,
 h2 {
   text-align: center;
 }
+
+.spinner-border.spinner-lg {
+  width: 3rem;
+  height: 3rem;
+}
 </style>
