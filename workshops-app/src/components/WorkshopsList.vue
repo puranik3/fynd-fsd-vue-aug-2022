@@ -17,7 +17,7 @@
                     class="w-100 p-3 my-3 workshop"
                 >
                     <b-card-text>
-                        <div>{{workshop.startDate}} - {{workshop.endDate}}</div>
+                        <div>{{workshop.startDate | date( format )}} - {{workshop.endDate | date( format )}}</div>
                         <div>{{workshop.time}}</div>
                     </b-card-text>
 
@@ -36,6 +36,7 @@ export default {
     name: "WorkshopsList",
     data() {
         return {
+            format: 'indian',
             workshops: [],
         };
     },
