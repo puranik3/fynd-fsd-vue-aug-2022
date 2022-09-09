@@ -6,10 +6,12 @@ const router = new Router({
     mode: 'history',
     routes: [
         {
+            name: 'home',
             path: '/',
             component: AppHome
         },
         {
+            name: 'workshops',
             path: '/workshops',
             component: WorkshopsList
         }
