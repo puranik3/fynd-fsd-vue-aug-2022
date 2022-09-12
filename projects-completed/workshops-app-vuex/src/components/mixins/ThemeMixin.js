@@ -17,5 +17,8 @@ export default {
                 return themes.includes( value );
             }
         }
-    }
+    },
+    // methods: {
+
+    // }
 }

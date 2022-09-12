@@ -12,6 +12,16 @@
 
     export default {
         name: 'AppAlert',
+        props: {
+            x: Number,
+            // theme: {
+            //     type: String,
+            //     default: 'primary',
+            //     validator( value ) {
+            //         return themes.includes( value );
+            //     }
+            // }
+        },
         mixins: [
             ThemeMixin
         ],

@@ -6,7 +6,11 @@ const getWorkshops = async () => {
 };
 
 const getWorkshopById = async ( id ) => {
-    const response = await axios.get( `https://workshops-server.herokuapp.com/workshops/${id}` );
+    const response = await axios.get( `https://workshops-server.herokuapp.com/workshops/${id}`, {
+        params: {
+            _embed: 'sessions'
+        }
+    });
     return response.data;
 };
 

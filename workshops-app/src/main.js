@@ -4,6 +4,10 @@ import {
   BootstrapVue,
   IconsPlugin,
 } from 'bootstrap-vue';
+import VueToast from 'vue-toast-notification';
+import Vuelidate from 'vuelidate';
+
+import AppVotingWidget from './components/utils/AppVotingWidget.vue';
 
 import App from './App.vue';
 
@@ -14,9 +18,19 @@ import dateFilter from './filters/date';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
+// Impport Fontawesome CSS (https://fontawesome.com/)
+import '@fortawesome/fontawesome-free/css/all.css';
+
+// Vue toast notification CSS
+import 'vue-toast-notification/dist/theme-default.css';
+
 Vue.use(Router);
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+Vue.use(VueToast);
+Vue.use(Vuelidate);
+
+Vue.component( 'AppVotingWidget', AppVotingWidget );
 
 Vue.filter( 'date', dateFilter );
 
