@@ -4,7 +4,7 @@
  import axios from 'axios';
  
  export const vote = async ( voteType, sessionId ) => {
-    const response = await axios.put( `https://workshops-server.herokuapp.com/sessions/${sessionId}/${voteType}` );
+    const response = await axios.put( `http://localhost:8001/sessions/${sessionId}/${voteType}` );
     return response.data;
     
  };

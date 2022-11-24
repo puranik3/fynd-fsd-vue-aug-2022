@@ -88,7 +88,9 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { email, required, minLength } from 'vuelidate/lib/validators'
+
 export default {
     name: 'AppLogin',
     data() {
@@ -125,8 +127,28 @@ export default {
         },
     },
     methods: {
-        login() {
-            
+        async login() {
+            this.$v.form.$touch();
+
+            if( this.$v.form.$invalid ) {
+                alert( 'Please correct the errors first, and then try logging in' );
+                return;
+            }
+
+            try {
+                const email = await this.$store.dispatch( 'login', this.form );
+                console.log( email );
+                this.$router.push({
+                    name: 'home'
+                });
+            } catch( error ) {
+                Vue.$toast.open({
+                    type: 'error',
+                    message: error.response.data,
+                    duration: 5000
+                });
+                console.log( error );
+            }
         },
         shouldAppendValidClass( field ) {
                 return !field.$invalid && field.$model && field.$dirty;
